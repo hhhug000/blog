@@ -14,6 +14,9 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			// Added fields for the new metadata layout
+			author: z.string().default('Hugo'),
+			tags: z.array(z.string()).default([]),
 		}),
 });
 
