@@ -1,86 +1,82 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, author = 'Hugo', tags = [] } = Astro.props;
+
+// Helper to format dates like "August 15th, 2023"
+function formatOrdinalDate(date: Date) {
+	const day = date.getDate();
+	const month = date.toLocaleDateString('en-US', { month: 'long' });
+	const year = date.getFullYear();
+
+	const nth = (d: number) => {
+		if (d > 3 && d < 21) return 'th';
+		switch (d % 10) {
+			case 1: return 'st';
+			case 2: return 'nd';
+			case 3: return 'rd';
+			default: return 'th';
+		}
+	};
+
+	return { month, day, suffix: nth(day), year };
+}
+
+const { month, day, suffix, year } = formatOrdinalDate(pubDate);
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<head>
+	<BaseHead title={title} description={description} />
+</head>
+<body>
+<div class="app-wrapper">
+	<Header />
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+	<main class="main-content">
+		<article class="single-post">
+			<header class="post-header">
+				<h1 class="post-title">{title}</h1>
+
+				<div class="post-meta">
+					<img src="/avatar.jpeg" alt={author} class="meta-avatar" />
+					<span class="meta-author">{author}</span>
+					<span class="meta-dot">·</span>
+					<span class="meta-date">
+								{month} {day}<sup>{suffix}</sup>, {year}
+							</span>
+
+					{tags.length > 0 && (
+						<>
+							<span class="meta-dot">·</span>
+							<div class="meta-tags">
+								{tags.map((tag) => (
+									<span class="tag">#{tag}</span>
+								))}
+							</div>
+						</>
+					)}
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
+			</header>
+
+			{updatedDate && (
+				<div class="last-updated">
+					Last updated on {updatedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
 				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+			)}
+
+			<hr class="post-divider" />
+
+			<div class="post-content">
+				<slot />
+			</div>
+		</article>
+	</main>
+</div>
+</body>
 </html>
