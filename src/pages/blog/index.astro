@@ -1,114 +1,89 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// Helper to format dates like "August 15th, 2023"
+function formatOrdinalDate(date: Date) {
+	const day = date.getDate();
+	const month = date.toLocaleDateString('en-US', { month: 'long' });
+	const year = date.getFullYear();
+
+	const nth = (d: number) => {
+		if (d > 3 && d < 21) return 'th';
+		switch (d % 10) {
+			case 1: return 'st';
+			case 2: return 'nd';
+			case 3: return 'rd';
+			default: return 'th';
+		}
+	};
+
+	return { month, day, suffix: nth(day), year };
+}
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
+<head>
+	<BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+</head>
+<body>
+<div class="app-wrapper">
+	<Header />
+
+	<main class="main-content">
+		<div class="posts-list">
+			{
+				posts.map((post) => {
+					const { month, day, suffix, year } = formatOrdinalDate(post.data.pubDate);
+					const author = post.data.author || 'Hugo';
+					const tags = post.data.tags || [];
+
+					return (
+						<article class="post-item">
+							<h2 class="post-title">
+								<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+							</h2>
+
+							<div class="post-meta">
+								<img
+									src="/avatar.jpeg"
+									alt={author}
+									class="meta-avatar"
+								/>
+								<span class="meta-author">{author}</span>
+								<span class="meta-dot">·</span>
+								<span class="meta-date">
+											{month} {day}<sup>{suffix}</sup>, {year}
+										</span>
+
+								{tags.length > 0 && (
+									<>
+										<span class="meta-dot">·</span>
+										<div class="meta-tags">
+											{tags.map((tag) => (
+												<span class="tag">#{tag}</span>
+											))}
+										</div>
+									</>
+								)}
+							</div>
+
+							{post.data.description && (
+								<p class="post-snippet">{post.data.description}</p>
+							)}
+						</article>
+					);
+				})
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+		</div>
+	</main>
+</div>
+</body>
 </html>
