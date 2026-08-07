@@ -2,6 +2,7 @@
 title: 'Test post'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 2026-08-04
+published: true
 author: "Hugo"
 tags: ["test", "demo"]
 ---
