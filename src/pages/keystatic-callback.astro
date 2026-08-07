@@ -1,0 +1,31 @@
+---
+
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Logging into Keystatic...</title>
+</head>
+<body>
+<p>Authenticating with Keystatic...</p>
+
+<script>
+    // 1. Extract access_token from the URL hash (#access_token=...)
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const token = hashParams.get('access_token');
+
+    if (token) {
+        // 2. Write the cookie and localStorage item on this domain
+        document.cookie = `keystatic-gh-access-token=${token}; path=/; max-age=2592000; SameSite=Lax`;
+        localStorage.setItem('keystatic-gh-access-token', token);
+
+        // 3. Forward into the Keystatic admin interface
+        window.location.href = '/keystatic';
+    } else {
+        document.body.innerText = 'Authentication failed. Missing token in URL.';
+    }
+</script>
+</body>
+</html>
