@@ -11,6 +11,7 @@ import keystatic from '@keystatic/astro';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://example.com',
+    output: `static`,
     integrations: [mdx(), sitemap(), react(), markdoc(), keystatic()],
     fonts: [
         {
