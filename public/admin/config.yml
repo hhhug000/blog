@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: hhhug000/blog
+  branch: main
+
+media_folder: 'src/content/blog/images'
+public_folder: '/blog/images'
+
+collections:
+  - name: blog
+    label: 'Blog Posts'
+    folder: 'src/content/blog'
+    create: true
+    format: 'frontmatter'
+    extension: 'md'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime', format: 'YYYY-MM-DD' }
+      - { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', required: false, format: 'YYYY-MM-DD' }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Author', name: 'author', widget: 'string', default: 'Hugo' }
+      - { label: 'Tags', name: 'tags', widget: 'list', required: false }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
