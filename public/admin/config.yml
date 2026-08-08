@@ -2,10 +2,12 @@ backend:
   name: github
   repo: hhhug000/blog
   branch: main
-  base_url: 'https://hugo.haaxman.co.uk/oauth'
+  base_url: 'https://cms-auth.haaxman.co.uk/'
 
 media_folder: 'src/content/blog/images'
 public_folder: '/blog/images'
+
+app_title: 'Blog CMS'
 
 collections:
   - name: blog
