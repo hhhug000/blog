@@ -2,6 +2,7 @@ backend:
   name: github
   repo: hhhug000/blog
   branch: main
+  base_url: 'https://hugo.haaxman.co.uk/oauth'
 
 media_folder: 'src/content/blog/images'
 public_folder: '/blog/images'
@@ -17,7 +18,7 @@ collections:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'text' }
       - { label: 'Publish Date', name: 'pubDate', widget: 'datetime', format: 'YYYY-MM-DD' }
-      - { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', required: false, format: 'YYYY-MM-DD' }
+      - { label: 'Published', name: 'published', widget: 'boolean', default: true }
       - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
       - { label: 'Author', name: 'author', widget: 'string', default: 'Hugo' }
       - { label: 'Tags', name: 'tags', widget: 'list', required: false }
