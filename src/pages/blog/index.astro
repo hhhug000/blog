@@ -6,7 +6,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+).filter((post) => post.data.published);
 
 // Helper to format dates like "August 15th, 2023"
 function formatOrdinalDate(date: Date) {
