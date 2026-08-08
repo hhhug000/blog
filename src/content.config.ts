@@ -17,6 +17,7 @@ const blog = defineCollection({
 			// Added fields for the new metadata layout
 			author: z.string().default('Hugo'),
 			tags: z.array(z.string()).default([]),
+			published: z.boolean().default(false),
 		}),
 });
 
