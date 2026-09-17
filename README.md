@@ -15,3 +15,9 @@ A minimalist, responsive personal blog built with **[Astro](https://astro.build)
 * **Publish Status System:** Posts only showed when `published: true` in frontmatter.
 * **Full-Text RSS Feed:** Generates sanitized full-HTML posts at `/rss.xml`.
 * **Zero Heavy Frameworks:** Ultra-lightweight footprint with zero client-side JavaScript shipped.
+
+## Licensing
+
+All code is licensed under the Apache 2.0 license unless stated otherwise.
+
+More details can be found in the LICENSE file.
