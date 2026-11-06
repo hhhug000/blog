@@ -2,7 +2,7 @@
 title: Reality
 description: My entry for my school's Jonathan Smith Essay Prize 2026 on the topic reality.
 pubDate: 2026-11-06
-published: false
+published: true
 heroImage: ''
 author: Hugo
 tags:
